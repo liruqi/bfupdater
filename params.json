@@ -1,0 +1,6 @@
+{
+  "name": "Bigfoot Updater",
+  "tagline": "Bigfoot WoW plugins Updater for Mac",
+  "body": "# Bigfoot Updater for Mac\r\n\r\n## Introduction\r\n\r\nThis project is the updater for [Bigfoot World of Warcraft plugins](http://bigfoot.178.com/wow/) on Mac since Bigfoot client doesn't support Mac and Mac WoWer can only update plugins by hand every time the plugins are updated.\r\n\r\n## Usage\r\n\r\nAnytime Bigfoot tips \"plugins are out of date\" in game, you can run `update.sh` to update you plugins.\r\n\r\nNOTE: you need to specify your path to WoW by hand before the first time you run `update.sh`(at the first several lines).\r\nIf your path is `/Users/wzh/software/games/World of Warcraft`, replace the `wow_parent_path` value with `/Users/wzh/software/games`.\r\nI assume Mac user knows how to get the path to his WoW.\r\n\r\nTo run this `update.sh` tool, simply open your terminal, change the working direcroty to this project, and type `./update.sh`. Wait for the update.\r\n\r\n## Error Reporting\r\n\r\nIf you observed message like \"ERROR: xxx\" in terminal or system tips error, please report at the [project issue site](https://github.com/jackwish/bfupdater/issues).\r\n\r\n## Backup\r\n\r\nCopyright 2016 WANG Zhenhua.\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
