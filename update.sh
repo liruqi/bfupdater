@@ -7,7 +7,7 @@ wow_parent_path="/Users/wzh/software/games"
 #                                                                         #
 #                 Bigfoot WoW plugins Updater for Mac                     #
 #                                                                         #
-#              project site: http://jackwish.net/bfupdate                 #
+#             project site: http://jackwish.net/bfupdater                 #
 #                                                                         #
 ###########################################################################
 
