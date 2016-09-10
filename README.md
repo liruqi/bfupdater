@@ -1,4 +1,4 @@
-# Bigfoot WoW plugins Updater for Mac
+# Bigfoot Updater for Mac
 
 ## Introduction
 
