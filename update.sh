@@ -50,6 +50,9 @@ function bfupdate()
         exit 1
     fi
     echo "5. Extraction finished, now updating plugins...\n"
+    if [ -d "${itf_path}/AddOns.backup" ]; then
+        rm -rf "${itf_path}/AddOns.backup"
+    fi
     if [ -d "${itf_path}/AddOns" ]; then
         mv "${itf_path}/AddOns" "${itf_path}/AddOns.backup"
     fi
