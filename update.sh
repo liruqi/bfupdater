@@ -1,7 +1,8 @@
 #!/bin/sh
+#set -e
 
 # XXX update this path accordingly
-wow_parent_path="/Users/wzh/software/games"
+wow_parent_path="/tmp"
 
 ###########################################################################
 #                                                                         #
@@ -12,14 +13,12 @@ wow_parent_path="/Users/wzh/software/games"
 ###########################################################################
 
 # do NOT touch below code unless you know what you are doing!
-wow_path="${wow_parent_path}/World of Warcraft"
 bf_update_url="http://bigfoot.178.com/wow/update.html"
-bf_working_dir="/tmp/bfworking"
+bf_working_dir="/srv/http/roomchat.im/bigfoot"
 page_tmp="${bf_working_dir}/update.html"
 bf_download_prefix="wow.bfupdate.178.com/BigFoot/Interface/3.1/Interface."
-bf_tmp_pkg="${bf_working_dir}/bf_update.zip"
-ext_dir="${bf_working_dir}/bf_update_tmp"
-itf_path="${wow_path}/Interface"
+ext_dir="/opt/liruqi/bigfoot"
+AddOns="AddOns"
 
 function cleanup()
 {
@@ -31,32 +30,39 @@ function cleanup()
 function bfupdate()
 {
     echo "2. Accessing Bigfoot update site...\n"
-    curl ${bf_update_url} > ${page_tmp}
+    curl  ${bf_update_url} > ${page_tmp}
     if [ $? -ne 0 ]; then
         echo "ERROR: fail to access Bigfoot update site!"
         exit 1
     fi
-    version=$(cat ${page_tmp} | cut -dV -f2 | cut -d版 -f1)
+    iconv -c -f utf-8 -t ascii ${page_tmp} > ${page_tmp}".txt" 
+    version=$(cat ${page_tmp}".txt" | cut -dV -f2 | cut -d"<" -f1)
+    bf_tmp_pkg="${bf_working_dir}/${version}.zip"
+    if [ -f $bf_tmp_pkg ]; then
+        echo "Version ${version} is latest!"
+        exit 0
+    fi 
+
     echo "3. Latest version is ${version}, downloading...\n"
     wget ${bf_download_prefix}${version}.zip -O ${bf_tmp_pkg} 1>/dev/null
     if [ $? -ne 0 ]; then
         echo "ERROR: fail download Bigfoot update package!"
         exit 1
     fi
+
+    rm -rfv  ${ext_dir}"/Interface"
     echo "4. Download finished, now extracting package...\n"
     unzip ${bf_tmp_pkg} -d ${ext_dir} 1>/dev/null
     if [ $? -ne 0 ]; then
         echo "ERROR: fail extract Bigfoot package!"
         exit 1
     fi
-    echo "5. Extraction finished, now updating plugins...\n"
-    if [ -d "${itf_path}/AddOns.backup" ]; then
-        rm -rf "${itf_path}/AddOns.backup"
-    fi
-    if [ -d "${itf_path}/AddOns" ]; then
-        mv "${itf_path}/AddOns" "${itf_path}/AddOns.backup"
-    fi
-    mv "${ext_dir}/Interface/AddOns" "${itf_path}/"
+    
+    cd ${ext_dir}
+    git add -A Interface  
+    git commit  -m "Version ${version}"
+    git push origin master
+    
     echo "6. All done!\n"
 }
 
@@ -78,15 +84,11 @@ function check_env()
         echo "ERROR: no '/tmp', are you truely working on Mac???"
         exit 1
     fi
-    if [ -d ${bf_working_dir} ]; then
-        rm -rf ${bf_working_dir}/*
-    else
-        mkdir ${bf_working_dir}
-    fi
-
+    mkdir ${bf_working_dir}
+    mkdir -p ${itf_path}
     echo "1. Environment check passed!\n"
 }
 
 check_env
 bfupdate
-cleanup
+# cleanup
