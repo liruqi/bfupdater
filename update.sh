@@ -14,7 +14,7 @@ wow_parent_path="/tmp"
 
 # do NOT touch below code unless you know what you are doing!
 bf_update_url="http://bigfoot.178.com/wow/update.html"
-bf_working_dir="/srv/http/roomchat.im/bigfoot"
+bf_working_dir=`pwd`"/bigfoot"
 page_tmp="${bf_working_dir}/update.html"
 bf_download_prefix="wow.bfupdate.178.com/BigFoot/Interface/3.1/Interface."
 ext_dir="/opt/liruqi/bigfoot"
