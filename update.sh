@@ -17,7 +17,7 @@ bf_update_url="http://bigfoot.178.com/wow/update.html"
 bf_working_dir=`pwd`"/bigfoot"
 page_tmp="${bf_working_dir}/update.html"
 bf_download_prefix="wow.bfupdate.178.com/BigFoot/Interface/3.1/Interface."
-ext_dir="/opt/liruqi/bigfoot"
+ext_dir="../bigfoot"
 AddOns="AddOns"
 
 function cleanup()
@@ -38,18 +38,17 @@ function bfupdate()
     iconv -c -f utf-8 -t ascii ${page_tmp} > ${page_tmp}".txt" 
     version=$(cat ${page_tmp}".txt" | cut -dV -f2 | cut -d"<" -f1)
     bf_tmp_pkg="${bf_working_dir}/${version}.zip"
-    if [ -f $bf_tmp_pkg ]; then
-        echo "Version ${version} is latest!"
-        exit 0
-    fi 
 
     echo "3. Latest version is ${version}, downloading...\n"
+    if [ ! -f $bf_tmp_pkg ]; then
     wget ${bf_download_prefix}${version}.zip -O ${bf_tmp_pkg} 1>/dev/null
     if [ $? -ne 0 ]; then
         echo "ERROR: fail download Bigfoot update package!"
         exit 1
     fi
+    fi
 
+    mv ${ext_dir}"/Interface/AddOns/premade-filter" /tmp
     rm -rfv  ${ext_dir}"/Interface"
     echo "4. Download finished, now extracting package...\n"
     unzip ${bf_tmp_pkg} -d ${ext_dir} 1>/dev/null
@@ -58,10 +57,11 @@ function bfupdate()
         exit 1
     fi
     
+    mv /tmp/premade-filter ${ext_dir}"/Interface/AddOns" 
     cd ${ext_dir}
     git add -A Interface  
     git commit  -m "Version ${version}"
-    git push origin master
+    #git push origin master
     
     echo "6. All done!\n"
 }
